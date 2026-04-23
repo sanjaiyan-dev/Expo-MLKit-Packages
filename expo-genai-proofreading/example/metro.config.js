@@ -19,7 +19,7 @@ config.resolver.nodeModulesPaths = [
 ];
 
 config.resolver.extraNodeModules = {
-  'expo-mlkit-genai-proofreading': '..',
+  'expo-genai-proofreading': '..',
 };
 
 config.watchFolders = [path.resolve(__dirname, '..')];

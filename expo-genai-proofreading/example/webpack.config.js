@@ -6,7 +6,7 @@ module.exports = async (env, argv) => {
     {
       ...env,
       babel: {
-        dangerouslyAddModulePathsToTranspile: ['expo-mlkit-genai-proofreading'],
+        dangerouslyAddModulePathsToTranspile: ['expo-genai-proofreading'],
       },
     },
     argv

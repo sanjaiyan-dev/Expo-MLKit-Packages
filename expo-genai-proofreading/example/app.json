@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo-mlkit-genai-proofreading-example",
-    "slug": "expo-mlkit-genai-proofreading-example",
+    "name": "expo-genai-proofreading-example",
+    "slug": "expo-genai-proofreading-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.mlkitgenaiproofreading.example"
+      "bundleIdentifier": "expo.modules.genaiproofreading.example"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,10 +23,20 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "expo.modules.mlkitgenaiproofreading.example"
+      "package": "expo.modules.genaiproofreading.example"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ]
+    ]
   }
 }

@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-genai-proofreading": ["../src/index"],
+      "expo-genai-proofreading/*": ["../src/*"]
+    }
+  }
+}

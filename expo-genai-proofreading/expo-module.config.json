@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ExpoGenaiProofreadingModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.genaiproofreading.ExpoGenaiProofreadingModule"]
+  }
+}
