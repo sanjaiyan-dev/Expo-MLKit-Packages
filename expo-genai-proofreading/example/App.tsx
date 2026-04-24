@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Button, SafeAreaView, Text, View, StyleSheet, TextInput } from 'react-native';
 
 export default function App() {
-  const { proofread, status } = useProofReader({ inputType: 'KEYBOARD', language: 'ENGLISH' })
+  const { proofread, status,downloadProgress } = useProofReader({ inputType: 'KEYBOARD', language: "ENGLISH" }) 
   const [txt, setTxt] = useState('')
   const [result, setResult] = useState<any>([])
 
   console.log(result);
   console.log(status);
+  console.log(downloadProgress)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,9 +18,10 @@ export default function App() {
       </View>
       <View style={styles.content}>
         <TextInput onChangeText={(t) => setTxt(t)} placeholder='Proofread text....' />
-        <Button title="LOl" onPress={async () => {
+        <Button title="Proof  Read" onPress={async () => {
           setResult(await proofread(txt))
         }} />
+        <Text style={{color: '#000'}}>{JSON.stringify(downloadProgress)}</Text>
       </View>
     </SafeAreaView>
   );
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     flex: 1,
     textAlign: 'center',
+    color: '#000'
   },
   header: {
     textAlign: 'justify',

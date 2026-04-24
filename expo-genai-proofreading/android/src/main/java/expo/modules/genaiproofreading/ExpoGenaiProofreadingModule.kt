@@ -12,6 +12,7 @@ import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.guava.await
 import kotlin.collections.mapOf
@@ -31,9 +32,12 @@ class ExpoGenaiProofreadingModule : Module() {
         // The module will be accessible from `requireNativeModule('ExpoGenaiProofreading')` in JavaScript.
         Name("ExpoGenaiProofreading")
 
+        Events("onDownloadProgress")
+
         OnDestroy {
-            proofreader?.close();
+            proofreader?.close()
             proofreader = null
+            ioScope.cancel()
         }
 
         AsyncFunction("initialize") { inputTypeStr: String, languageStr: String ->
@@ -91,18 +95,44 @@ class ExpoGenaiProofreadingModule : Module() {
 
         AsyncFunction("downloadFeature") { promise: Promise ->
             val pr = proofreader ?: run {
+                print(proofreader)
                 promise.reject("ERR_NOT_INIT", "Proofreader not initialized.", null)
                 return@AsyncFunction
             }
 
             pr.downloadFeature(object : DownloadCallback {
-                override fun onDownloadStarted(bytesToDownload: Long) {}
-                override fun onDownloadProgress(totalBytesDownloaded: Long) {}
+                override fun onDownloadStarted(bytesToDownload: Long) {
+
+                    this@ExpoGenaiProofreadingModule.sendEvent(
+                        "onDownloadProgress",
+                        mapOf(
+                            "status" to "started",
+                            "bytesToDownload" to bytesToDownload.toDouble(),
+                            "totalBytesDownloaded" to 0L
+                        )
+                    )
+                }
+
+                override fun onDownloadProgress(totalBytesDownloaded: Long) {
+
+                    this@ExpoGenaiProofreadingModule.sendEvent(
+                        "onDownloadProgress", mapOf(
+                            "status" to "progress",
+                            "totalBytesDownloaded" to totalBytesDownloaded.toDouble()
+                        )
+                    )
+                }
+
                 override fun onDownloadFailed(e: GenAiException) {
                     promise.reject("ERR_DOWNLOAD", e.message, e)
                 }
 
                 override fun onDownloadCompleted() {
+                    this@ExpoGenaiProofreadingModule.sendEvent(
+                        "onDownloadProgress", mapOf(
+                            "status" to "completed"
+                        )
+                    )
                     promise.resolve(true)
                 }
             })
